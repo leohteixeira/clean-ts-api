@@ -1,5 +1,6 @@
 import { SignUpController } from '../../../src/presentation/controllers'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../src/presentation/errors'
+import { throwError } from '../../utils'
 import { EmailValidatorSpy } from '../mocks'
 
 interface SutTypes {
@@ -105,13 +106,10 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 500 if EmailValidator throws', () => {
-    class EmailValidatorSpy {
-      isValid (email: string): boolean {
-        throw new Error()
-      }
-    }
-    const emailValidatorSpy = new EmailValidatorSpy()
-    const sut = new SignUpController(emailValidatorSpy)
+    const { sut, emailValidatorSpy } = makeSut()
+    jest.spyOn(emailValidatorSpy, 'isValid').mockImplementationOnce(
+      throwError
+    )
     const httpRequest = {
       body: {
         name: 'any_name',
