@@ -8,7 +8,7 @@ export class EmailValidatorSpy implements EmailValidator {
 }
 
 export class AddAccountSpy implements AddAccount {
-  add (account: AddAccount.Params): AddAccount.Result {
+  async add (account: AddAccount.Params): Promise<AddAccount.Result> {
     const fakeAccount = {
       id: 'valid_id',
       name: 'valid_name',
