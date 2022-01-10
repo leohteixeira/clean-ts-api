@@ -1,19 +1,22 @@
 import { SignUpController } from '../../../src/presentation/controllers'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../src/presentation/errors'
 import { throwError } from '../../utils'
-import { EmailValidatorSpy } from '../mocks'
+import { EmailValidatorSpy, AddAccountSpy } from '../mocks'
 
 interface SutTypes {
   sut: SignUpController
   emailValidatorSpy: EmailValidatorSpy
+  addAccountSpy: AddAccountSpy
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorSpy = new EmailValidatorSpy()
-  const sut = new SignUpController(emailValidatorSpy)
+  const addAccountSpy = new AddAccountSpy()
+  const sut = new SignUpController(emailValidatorSpy, addAccountSpy)
   return {
     sut,
-    emailValidatorSpy
+    emailValidatorSpy,
+    addAccountSpy
   }
 }
 
@@ -136,5 +139,24 @@ describe('SignUp Controller', () => {
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should call AddAccount with correct values', () => {
+    const { sut, addAccountSpy } = makeSut()
+    const addSpy = jest.spyOn(addAccountSpy, 'add')
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
   })
 })
