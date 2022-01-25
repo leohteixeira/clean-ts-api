@@ -1,7 +1,7 @@
-import { SignUpController } from '../../../../src/presentation/controllers'
-import { MissingParamError, InvalidParamError, ServerError } from '../../../../src/presentation/errors'
-import { throwError } from '../../../utils'
-import { EmailValidatorSpy, AddAccountSpy } from '../../mocks'
+import { SignUpController } from '@/presentation/controllers'
+import { MissingParamError, InvalidParamError, ServerError } from '@/presentation/errors'
+import { EmailValidatorSpy, AddAccountSpy } from '@/tests/presentation/mocks'
+import { throwError } from '@/tests/utils'
 
 interface SutTypes {
   sut: SignUpController

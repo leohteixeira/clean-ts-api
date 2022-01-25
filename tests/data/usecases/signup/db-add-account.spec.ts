@@ -1,5 +1,5 @@
-import { DbAddAccount } from '../../../../src/data/usecases'
-import { AddAccountRepositorySpy, EncrypterSpy } from '../../mocks'
+import { DbAddAccount } from '@/data/usecases'
+import { AddAccountRepositorySpy, EncrypterSpy } from '@/tests/data/mocks'
 
 interface SutTypes {
   sut: DbAddAccount

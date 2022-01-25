@@ -1,4 +1,4 @@
-import { BcryptAdapter } from '../../../src/infra/criptography'
+import { BcryptAdapter } from '@/infra/criptography'
 
 import bcrypt from 'bcrypt'
 

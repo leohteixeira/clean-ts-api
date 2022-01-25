@@ -1,4 +1,4 @@
-import { AddAccountRepository } from '../../../src/data/protocols'
+import { AddAccountRepository } from '@/data/protocols'
 
 export class AddAccountRepositorySpy implements AddAccountRepository {
   params: AddAccountRepository.Params

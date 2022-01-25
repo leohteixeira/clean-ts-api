@@ -1,5 +1,5 @@
-import { AddAccount } from '../../../src/domain/usecases'
-import { EmailValidator } from '../../../src/presentation/protocols'
+import { AddAccount } from '@/domain/usecases'
+import { EmailValidator } from '@/presentation/protocols'
 
 export class EmailValidatorSpy implements EmailValidator {
   isValid (email: string): boolean {

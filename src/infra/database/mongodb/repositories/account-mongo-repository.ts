@@ -1,5 +1,5 @@
-import { AddAccountRepository } from '../../../../data/protocols'
-import { MongoHelper } from '../helper'
+import { AddAccountRepository } from '@/data/protocols'
+import { MongoHelper } from '@/infra/database/mongodb/helper'
 
 export class AccountMongoRepository implements AddAccountRepository {
   async add (params: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
