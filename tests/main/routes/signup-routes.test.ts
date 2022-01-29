@@ -1,5 +1,5 @@
 import { MongoHelper } from '@/infra/database/mongodb/helper'
-import app from '@/main/config/app'
+import { app } from '@/main/config'
 
 import request from 'supertest'
 
