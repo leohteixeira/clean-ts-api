@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { adaptRoute } from '@/main/adapters'
+import { makeSignUpController } from '@/main/factories'
+
 import { Router } from 'express'
 
-export default (router: Router): void => {
-  router.post('/signup', (req, res) => {
-    res.json({ ok: 'ok' })
-  })
+export const applySignUpRoutes = (router: Router): void => {
+  router.post('/signup', adaptRoute(makeSignUpController()))
 }

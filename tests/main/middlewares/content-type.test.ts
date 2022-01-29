@@ -1,9 +1,10 @@
-import { app } from '@/main/config'
+import { buildApp } from '@/main/config'
 
 import request from 'supertest'
 
 describe('Content Type Middleware', () => {
   test('Should return default content type as json', async () => {
+    const app = await buildApp()
     app.get('/test_content_type', (req, res) => {
       res.send('')
     })
@@ -12,6 +13,7 @@ describe('Content Type Middleware', () => {
       .expect('content-type', /json/)
   })
   test('Should return xml content type when forced', async () => {
+    const app = await buildApp()
     app.get('/test_content_type_xml', (req, res) => {
       res.type('xml')
       res.send('')

@@ -1,5 +1,5 @@
 import { MongoHelper } from '@/infra/database/mongodb/helper'
-import { app } from '@/main/config'
+import { buildApp } from '@/main/config'
 
 import request from 'supertest'
 
@@ -18,6 +18,7 @@ describe('SignUp Routes', () => {
   })
 
   test('Should return an account on success', async () => {
+    const app = await buildApp()
     await request(app)
       .post('/api/signup')
       .send({
