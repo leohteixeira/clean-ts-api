@@ -1,5 +1,5 @@
 export interface LogErrorRepository {
-  log: (stack: LogErrorRepository.Params) => Promise<LogErrorRepository.Result>
+  logError: (stack: LogErrorRepository.Params) => Promise<LogErrorRepository.Result>
 }
 
 export namespace LogErrorRepository {
