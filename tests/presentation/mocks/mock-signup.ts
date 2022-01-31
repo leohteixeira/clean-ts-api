@@ -1,6 +1,6 @@
 import { AddAccount } from '@/domain/usecases'
 import { EmailValidator } from '@/presentation/protocols'
-
+import { mockAccountModel } from '@/tests/domain/mocks'
 export class EmailValidatorSpy implements EmailValidator {
   isValid (email: string): boolean {
     return true
@@ -8,13 +8,11 @@ export class EmailValidatorSpy implements EmailValidator {
 }
 
 export class AddAccountSpy implements AddAccount {
-  async add (account: AddAccount.Params): Promise<AddAccount.Result> {
-    const fakeAccount = {
-      id: 'valid_id',
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
-      password: 'valid_password'
-    }
-    return fakeAccount
+  params: AddAccount.Params
+  result: AddAccount.Result = mockAccountModel()
+
+  async add (params: AddAccount.Params): Promise<AddAccount.Result> {
+    this.params = params
+    return this.result
   }
 }
