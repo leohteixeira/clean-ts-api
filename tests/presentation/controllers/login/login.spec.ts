@@ -2,7 +2,7 @@ import { LoginController } from '@/presentation/controllers'
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
-import { EmailValidatorSpy } from '@/tests/presentation/mocks'
+import { EmailValidatorSpy, AuthenticationSpy } from '@/tests/presentation/mocks'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -14,14 +14,17 @@ const mockRequest = (): HttpRequest => ({
 interface SutTypes {
   sut: LoginController
   emailValidatorSpy: EmailValidatorSpy
+  authenticationSpy: AuthenticationSpy
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorSpy = new EmailValidatorSpy()
-  const sut = new LoginController(emailValidatorSpy)
+  const authenticationSpy = new AuthenticationSpy()
+  const sut = new LoginController(emailValidatorSpy, authenticationSpy)
   return {
     sut,
-    emailValidatorSpy
+    emailValidatorSpy,
+    authenticationSpy
   }
 }
 
@@ -74,5 +77,13 @@ describe('Login Controller', () => {
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should call Authentication with correct values', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const authSpy = jest.spyOn(authenticationSpy, 'auth')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
