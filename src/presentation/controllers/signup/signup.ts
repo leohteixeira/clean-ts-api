@@ -1,6 +1,6 @@
 import { AddAccount } from '@/domain/usecases'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
-import { badRequest, ok, serverError, Validation } from '@/presentation/helpers'
+import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { badRequest, ok, serverError } from '@/presentation/helpers'
 
 export class SignUpController implements Controller {
   private readonly addAccount: AddAccount
