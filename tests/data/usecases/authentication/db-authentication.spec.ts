@@ -1,5 +1,5 @@
 import { DbAuthentication } from '@/data/usecases'
-import { LoadAccountByEmailRepositorySpy, HashComparerSpy, TokenGeneratorSpy } from '@/tests/data/mocks'
+import { LoadAccountByEmailRepositorySpy, HashComparerSpy, TokenGeneratorSpy, UpdateAccessTokenRepositorySpy } from '@/tests/data/mocks'
 import { mockLoginParams } from '@/tests/domain/mocks'
 
 interface SutTypes {
@@ -7,18 +7,21 @@ interface SutTypes {
   loadAccountByEmailRepositorySpy: LoadAccountByEmailRepositorySpy
   hashComparerSpy: HashComparerSpy
   tokenGeneratorSpy: TokenGeneratorSpy
+  updateAccessTokenRepositorySpy: UpdateAccessTokenRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositorySpy = new LoadAccountByEmailRepositorySpy()
   const hashComparerSpy = new HashComparerSpy()
   const tokenGeneratorSpy = new TokenGeneratorSpy()
-  const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy, tokenGeneratorSpy)
+  const updateAccessTokenRepositorySpy = new UpdateAccessTokenRepositorySpy()
+  const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy, tokenGeneratorSpy, updateAccessTokenRepositorySpy)
   return {
     sut,
     loadAccountByEmailRepositorySpy,
     hashComparerSpy,
-    tokenGeneratorSpy
+    tokenGeneratorSpy,
+    updateAccessTokenRepositorySpy
   }
 }
 
@@ -27,7 +30,7 @@ describe('DbAuthentication usecase', () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByEmailRepositorySpy, 'load')
     await sut.auth(mockLoginParams())
-    expect(loadSpy).toHaveBeenCalledWith('any_email@mail.com')
+    expect(loadSpy).toHaveBeenCalledWith(loadAccountByEmailRepositorySpy.params)
   })
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
@@ -50,7 +53,7 @@ describe('DbAuthentication usecase', () => {
     const { sut, hashComparerSpy } = makeSut()
     const compareSpy = jest.spyOn(hashComparerSpy, 'compare')
     await sut.auth(mockLoginParams())
-    expect(compareSpy).toHaveBeenCalledWith({ value: 'any_password', hash: 'hashed_password' })
+    expect(compareSpy).toHaveBeenCalledWith(hashComparerSpy.params)
   })
 
   test('Should throw if HashComparer throws', async () => {
@@ -75,7 +78,7 @@ describe('DbAuthentication usecase', () => {
     const { sut, tokenGeneratorSpy } = makeSut()
     const generateSpy = jest.spyOn(tokenGeneratorSpy, 'generate')
     await sut.auth(mockLoginParams())
-    expect(generateSpy).toHaveBeenCalledWith('valid_id')
+    expect(generateSpy).toHaveBeenCalledWith(tokenGeneratorSpy.params)
   })
 
   test('Should throw if TokenGenerator throws', async () => {
@@ -91,5 +94,12 @@ describe('DbAuthentication usecase', () => {
     const { sut } = makeSut()
     const accessToken = await sut.auth(mockLoginParams())
     expect(accessToken).toBe('any_token')
+  })
+
+  test('Should call UpdateAccessTokenRepository with correct values', async () => {
+    const { sut, updateAccessTokenRepositorySpy } = makeSut()
+    const updateSpy = jest.spyOn(updateAccessTokenRepositorySpy, 'update')
+    await sut.auth(mockLoginParams())
+    expect(updateSpy).toHaveBeenCalledWith(updateAccessTokenRepositorySpy.params)
   })
 })

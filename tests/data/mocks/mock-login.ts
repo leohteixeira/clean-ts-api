@@ -1,4 +1,4 @@
-import { LoadAccountByEmailRepository } from '@/data/protocols'
+import { LoadAccountByEmailRepository, UpdateAccessTokenRepository } from '@/data/protocols'
 import { mockAccountModel } from '@/tests/domain/mocks'
 
 export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailRepository {
@@ -8,5 +8,13 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
   async load (email: LoadAccountByEmailRepository.Params): Promise<LoadAccountByEmailRepository.Result> {
     this.params = email
     return this.result
+  }
+}
+
+export class UpdateAccessTokenRepositorySpy implements UpdateAccessTokenRepository {
+  params: UpdateAccessTokenRepository.Params
+
+  async update (params: UpdateAccessTokenRepository.Params): Promise<UpdateAccessTokenRepository.Result> {
+    this.params = params
   }
 }
