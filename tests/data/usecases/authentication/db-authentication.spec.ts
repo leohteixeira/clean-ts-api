@@ -86,4 +86,10 @@ describe('DbAuthentication usecase', () => {
     const promise = sut.auth(mockLoginParams())
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should call TokenGenerator with correct id', async () => {
+    const { sut } = makeSut()
+    const accessToken = await sut.auth(mockLoginParams())
+    expect(accessToken).toBe('any_token')
+  })
 })
