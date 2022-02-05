@@ -1,21 +1,24 @@
 import { DbAuthentication } from '@/data/usecases'
-import { LoadAccountByEmailRepositorySpy, HashComparerSpy } from '@/tests/data/mocks'
+import { LoadAccountByEmailRepositorySpy, HashComparerSpy, TokenGeneratorSpy } from '@/tests/data/mocks'
 import { mockLoginParams } from '@/tests/domain/mocks'
 
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositorySpy: LoadAccountByEmailRepositorySpy
   hashComparerSpy: HashComparerSpy
+  tokenGeneratorSpy: TokenGeneratorSpy
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositorySpy = new LoadAccountByEmailRepositorySpy()
   const hashComparerSpy = new HashComparerSpy()
-  const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy)
+  const tokenGeneratorSpy = new TokenGeneratorSpy()
+  const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy, tokenGeneratorSpy)
   return {
     sut,
     loadAccountByEmailRepositorySpy,
-    hashComparerSpy
+    hashComparerSpy,
+    tokenGeneratorSpy
   }
 }
 
@@ -66,5 +69,12 @@ describe('DbAuthentication usecase', () => {
     )
     const accessToken = await sut.auth(mockLoginParams())
     expect(accessToken).toBeNull()
+  })
+
+  test('Should call TokenGenerator with correct id', async () => {
+    const { sut, tokenGeneratorSpy } = makeSut()
+    const generateSpy = jest.spyOn(tokenGeneratorSpy, 'generate')
+    await sut.auth(mockLoginParams())
+    expect(generateSpy).toHaveBeenCalledWith('valid_id')
   })
 })
