@@ -1,5 +1,5 @@
-import { AddAccount } from '@/domain/usecases'
-import { Account } from '../models'
+import { AddAccount, Authentication } from '@/domain/usecases'
+import { Account } from '@/domain/models'
 
 export const mockAddAccountParams = (): AddAccount.Params => ({
   name: 'any_name',
@@ -12,4 +12,9 @@ export const mockAccountModel = (): Account.Model => ({
   name: 'valid_name',
   email: 'valid_email@mail.com',
   password: 'valid_password'
+})
+
+export const mockLoginParams = (): Authentication.Params => ({
+  email: 'any_email@mail.com',
+  password: 'any_password'
 })
