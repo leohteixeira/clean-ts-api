@@ -64,6 +64,6 @@ describe('LogController Decorator', () => {
     )
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(logSpy).toHaveBeenCalledWith('any_stack')
+    expect(logSpy).toHaveBeenCalledWith(logErrorRepositorySpy.params)
   })
 })

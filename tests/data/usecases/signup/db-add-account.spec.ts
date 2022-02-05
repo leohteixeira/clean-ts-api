@@ -25,7 +25,7 @@ describe('DbAddAccount Usecase', () => {
     const encryptSpy = jest.spyOn(encrypterSpy, 'encrypt')
     const accountData = mockAddAccountParams()
     await sut.add(accountData)
-    expect(encryptSpy).toHaveBeenCalledWith('any_password')
+    expect(encryptSpy).toHaveBeenCalledWith(encrypterSpy.params)
   })
 
   test('Should throw if Encrypter throws', async () => {
@@ -43,11 +43,7 @@ describe('DbAddAccount Usecase', () => {
     const addSpy = jest.spyOn(addAccountRepositorySpy, 'add')
     const accountData = mockAddAccountParams()
     await sut.add(accountData)
-    expect(addSpy).toHaveBeenCalledWith({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'hashed_password'
-    })
+    expect(addSpy).toHaveBeenCalledWith(addAccountRepositorySpy.params)
   })
 
   test('Should call AddAccountRepository with correct values', async () => {
