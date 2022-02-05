@@ -1,18 +1,21 @@
 import { DbAuthentication } from '@/data/usecases'
-import { LoadAccountByEmailRepositorySpy } from '@/tests/data/mocks'
+import { LoadAccountByEmailRepositorySpy, HashComparerSpy } from '@/tests/data/mocks'
 import { mockLoginParams } from '@/tests/domain/mocks'
 
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositorySpy: LoadAccountByEmailRepositorySpy
+  hashComparerSpy: HashComparerSpy
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositorySpy = new LoadAccountByEmailRepositorySpy()
-  const sut = new DbAuthentication(loadAccountByEmailRepositorySpy)
+  const hashComparerSpy = new HashComparerSpy()
+  const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy)
   return {
     sut,
-    loadAccountByEmailRepositorySpy
+    loadAccountByEmailRepositorySpy,
+    hashComparerSpy
   }
 }
 
@@ -38,5 +41,12 @@ describe('DbAuthentication usecase', () => {
     jest.spyOn(loadAccountByEmailRepositorySpy, 'load').mockReturnValueOnce(null)
     const accessToken = await sut.auth(mockLoginParams())
     expect(accessToken).toBeNull()
+  })
+
+  test('Should call HasherComparer with correct values', async () => {
+    const { sut, hashComparerSpy } = makeSut()
+    const compareSpy = jest.spyOn(hashComparerSpy, 'compare')
+    await sut.auth(mockLoginParams())
+    expect(compareSpy).toHaveBeenCalledWith({ value: 'any_password', hash: 'hashed_password' })
   })
 })
