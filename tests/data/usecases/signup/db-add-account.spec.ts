@@ -1,36 +1,36 @@
 import { DbAddAccount } from '@/data/usecases'
-import { AddAccountRepositorySpy, EncrypterSpy } from '@/tests/data/mocks'
+import { AddAccountRepositorySpy, HasherSpy } from '@/tests/data/mocks'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
 
 interface SutTypes {
   sut: DbAddAccount
-  encrypterSpy: EncrypterSpy
+  hasherSpy: HasherSpy
   addAccountRepositorySpy: AddAccountRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
-  const encrypterSpy = new EncrypterSpy()
+  const hasherSpy = new HasherSpy()
   const addAccountRepositorySpy = new AddAccountRepositorySpy()
-  const sut = new DbAddAccount(encrypterSpy, addAccountRepositorySpy)
+  const sut = new DbAddAccount(hasherSpy, addAccountRepositorySpy)
   return {
     sut,
-    encrypterSpy,
+    hasherSpy,
     addAccountRepositorySpy
   }
 }
 
 describe('DbAddAccount Usecase', () => {
-  test('Should call Encrypter with correct password', async () => {
-    const { sut, encrypterSpy } = makeSut()
-    const encryptSpy = jest.spyOn(encrypterSpy, 'encrypt')
+  test('Should call Hasher with correct password', async () => {
+    const { sut, hasherSpy } = makeSut()
+    const hashSpy = jest.spyOn(hasherSpy, 'hash')
     const accountData = mockAddAccountParams()
     await sut.add(accountData)
-    expect(encryptSpy).toHaveBeenCalledWith(encrypterSpy.params)
+    expect(hashSpy).toHaveBeenCalledWith(hasherSpy.params)
   })
 
-  test('Should throw if Encrypter throws', async () => {
-    const { sut, encrypterSpy } = makeSut()
-    jest.spyOn(encrypterSpy, 'encrypt').mockReturnValueOnce(
+  test('Should throw if Hasher throws', async () => {
+    const { sut, hasherSpy } = makeSut()
+    jest.spyOn(hasherSpy, 'hash').mockReturnValueOnce(
       new Promise((resolve, reject) => reject(new Error()))
     )
     const accountData = mockAddAccountParams()

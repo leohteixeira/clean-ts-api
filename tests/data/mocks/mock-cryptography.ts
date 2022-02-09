@@ -1,10 +1,10 @@
-import { Encrypter, HashComparer, TokenGenerator } from '@/data/protocols'
+import { Hasher, HashComparer, TokenGenerator } from '@/data/protocols'
 
-export class EncrypterSpy implements Encrypter {
-  params: Encrypter.Params
-  result: Encrypter.Result = 'hashed_password'
+export class HasherSpy implements Hasher {
+  params: Hasher.Params
+  result: Hasher.Result = 'hashed_password'
 
-  async encrypt (params: Encrypter.Params): Promise<Encrypter.Result> {
+  async hash (params: Hasher.Params): Promise<Hasher.Result> {
     this.params = params
     return this.result
   }
