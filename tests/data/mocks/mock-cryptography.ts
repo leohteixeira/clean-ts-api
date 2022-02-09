@@ -1,4 +1,4 @@
-import { Hasher, HashComparer, TokenGenerator } from '@/data/protocols'
+import { Hasher, HashComparer, Encrypter } from '@/data/protocols'
 
 export class HasherSpy implements Hasher {
   params: Hasher.Params
@@ -20,12 +20,12 @@ export class HashComparerSpy implements HashComparer {
   }
 }
 
-export class TokenGeneratorSpy implements TokenGenerator {
-  params: TokenGenerator.Params
-  result: TokenGenerator.Result = 'any_token'
+export class EncrypterSpy implements Encrypter {
+  params: Encrypter.Params
+  result: Encrypter.Result = 'any_token'
 
-  async generate (id: TokenGenerator.Params): Promise<TokenGenerator.Result> {
-    this.params = id
+  async encrypt (value: Encrypter.Params): Promise<Encrypter.Result> {
+    this.params = value
     return this.result
   }
 }
