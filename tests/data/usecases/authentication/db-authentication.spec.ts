@@ -28,14 +28,14 @@ const makeSut = (): SutTypes => {
 describe('DbAuthentication usecase', () => {
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
-    const loadSpy = jest.spyOn(loadAccountByEmailRepositorySpy, 'load')
+    const loadSpy = jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail')
     await sut.auth(mockLoginParams())
     expect(loadSpy).toHaveBeenCalledWith(loadAccountByEmailRepositorySpy.params)
   })
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositorySpy, 'load').mockReturnValueOnce(
+    jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail').mockReturnValueOnce(
       new Promise((resolve, reject) => reject(new Error()))
     )
     const promise = sut.auth(mockLoginParams())
@@ -44,7 +44,7 @@ describe('DbAuthentication usecase', () => {
 
   test('Should return null if LoadAccountByEmailRepository returns null', async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositorySpy, 'load').mockReturnValueOnce(null)
+    jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail').mockReturnValueOnce(null)
     const accessToken = await sut.auth(mockLoginParams())
     expect(accessToken).toBeNull()
   })
@@ -98,14 +98,14 @@ describe('DbAuthentication usecase', () => {
 
   test('Should call UpdateAccessTokenRepository with correct values', async () => {
     const { sut, updateAccessTokenRepositorySpy } = makeSut()
-    const updateSpy = jest.spyOn(updateAccessTokenRepositorySpy, 'update')
+    const updateSpy = jest.spyOn(updateAccessTokenRepositorySpy, 'updateAccessToken')
     await sut.auth(mockLoginParams())
     expect(updateSpy).toHaveBeenCalledWith(updateAccessTokenRepositorySpy.params)
   })
 
   test('Should throw if UpdateAccessTokenRepository throws', async () => {
     const { sut, updateAccessTokenRepositorySpy } = makeSut()
-    jest.spyOn(updateAccessTokenRepositorySpy, 'update').mockReturnValueOnce(
+    jest.spyOn(updateAccessTokenRepositorySpy, 'updateAccessToken').mockReturnValueOnce(
       new Promise((resolve, reject) => reject(new Error()))
     )
     const promise = sut.auth(mockLoginParams())

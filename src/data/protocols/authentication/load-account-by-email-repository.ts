@@ -1,7 +1,7 @@
 import { Account } from '@/domain/models'
 
 export interface LoadAccountByEmailRepository {
-  load: (email: LoadAccountByEmailRepository.Params) => Promise<LoadAccountByEmailRepository.Result>
+  loadByEmail: (email: LoadAccountByEmailRepository.Params) => Promise<LoadAccountByEmailRepository.Result>
 }
 
 export namespace LoadAccountByEmailRepository {
