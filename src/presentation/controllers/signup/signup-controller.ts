@@ -3,13 +3,10 @@ import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentatio
 import { badRequest, ok, serverError } from '@/presentation/helpers'
 
 export class SignUpController implements Controller {
-  private readonly addAccount: AddAccount
-  private readonly validation: Validation
-
-  constructor (addAccount: AddAccount, validation: Validation) {
-    this.addAccount = addAccount
-    this.validation = validation
-  }
+  constructor (
+    private readonly addAccount: AddAccount,
+    private readonly validation: Validation
+  ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
