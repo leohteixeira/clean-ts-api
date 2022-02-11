@@ -1,4 +1,4 @@
 export * from './cryptography'
-export * from './signup'
+export * from './account'
 export * from './log'
 export * from './authentication'
