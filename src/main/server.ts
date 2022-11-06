@@ -5,6 +5,6 @@ import { buildApp, env } from '@/main/config'
 MongoHelper.connect(env.mongoUrl)
   .then(buildApp)
   .then((app) => {
-    app.listen(5050, () => console.log(`Server runing at http://localhost:${env.port}`))
+    app.listen(env.port, () => console.log(`Server runing at http://localhost:${env.port}`))
   })
   .catch(console.error)
