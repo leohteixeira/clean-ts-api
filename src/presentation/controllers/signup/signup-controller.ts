@@ -1,10 +1,11 @@
-import { AddAccount } from '@/domain/usecases'
+import { AddAccount, Authentication } from '@/domain/usecases'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 import { badRequest, ok, serverError } from '@/presentation/helpers'
 
 export class SignUpController implements Controller {
   constructor (
     private readonly addAccount: AddAccount,
+    private readonly authentication: Authentication,
     private readonly validation: Validation
   ) {}
 
@@ -21,6 +22,12 @@ export class SignUpController implements Controller {
         email,
         password
       })
+
+      await this.authentication.auth({
+        email,
+        password
+      })
+
       return ok(account)
     } catch (error) {
       return serverError(error)
