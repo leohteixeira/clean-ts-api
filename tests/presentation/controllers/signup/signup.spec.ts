@@ -1,6 +1,6 @@
 import { SignUpController } from '@/presentation/controllers'
 import { MissingParamError, ServerError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers'
+import { badRequest, serverError, ok } from '@/presentation/helpers'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockAddAccountParams } from '@/tests/domain/mocks'
 import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from '@/tests/presentation/mocks'
@@ -83,10 +83,9 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 200 if valid data is provided', async () => {
-    const { sut, addAccountSpy } = makeSut()
+    const { sut } = makeSut()
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toEqual(addAccountSpy.result)
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
   })
 })
