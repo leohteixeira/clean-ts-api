@@ -1,5 +1,5 @@
 import { InvalidParamError } from '@/presentation/errors'
-import { EmailValidation } from '@/presentation/helpers'
+import { EmailValidation } from '@/validation/validators'
 import { EmailValidatorSpy } from '@/tests/presentation/mocks'
 import { throwError } from '@/tests/utils'
 

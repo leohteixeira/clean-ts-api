@@ -1,5 +1,5 @@
 import { AddAccount } from '@/domain/usecases'
-import { EmailValidator } from '@/presentation/protocols'
+import { EmailValidator } from '@/validation/protocols'
 import { mockAccountModel } from '@/tests/domain/mocks'
 export class EmailValidatorSpy implements EmailValidator {
   isValid (email: string): boolean {
