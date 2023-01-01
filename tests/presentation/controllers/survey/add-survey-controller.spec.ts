@@ -1,7 +1,7 @@
 import { HttpRequest } from '@/presentation/protocols'
 import { AddSurveyController } from '@/presentation/controllers'
 import { badRequest } from '@/presentation/helpers'
-import { ValidationSpy } from '@/tests/presentation/mocks'
+import { AddSurveySpy, ValidationSpy } from '@/tests/presentation/mocks'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -13,14 +13,17 @@ const mockRequest = (): HttpRequest => ({
 interface SutTypes {
   sut: AddSurveyController
   validationSpy: ValidationSpy
+  addSurveySpy: AddSurveySpy
 }
 
 const makeSut = (): SutTypes => {
   const validationSpy = new ValidationSpy()
-  const sut = new AddSurveyController(validationSpy)
+  const addSurveySpy = new AddSurveySpy()
+  const sut = new AddSurveyController(validationSpy, addSurveySpy)
   return {
     sut,
-    validationSpy
+    validationSpy,
+    addSurveySpy
   }
 }
 
@@ -39,5 +42,13 @@ describe('AddSurvey Controller', () => {
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new Error()))
+  })
+
+  test('Should call AddSurvey with correct values', async () => {
+    const { sut, addSurveySpy } = makeSut()
+    const addSpy = jest.spyOn(addSurveySpy, 'add')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith(addSurveySpy.params)
   })
 })
