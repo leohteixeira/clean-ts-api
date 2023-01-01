@@ -1,7 +1,8 @@
 import { HttpRequest } from '@/presentation/protocols'
 import { AddSurveyController } from '@/presentation/controllers'
-import { badRequest } from '@/presentation/helpers'
+import { badRequest, serverError } from '@/presentation/helpers'
 import { AddSurveySpy, ValidationSpy } from '@/tests/presentation/mocks'
+import { throwError } from '@/tests/utils'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -50,5 +51,13 @@ describe('AddSurvey Controller', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(addSpy).toHaveBeenCalledWith(addSurveySpy.params)
+  })
+
+  test('Should return 500 if AddSurvey throws', async () => {
+    const { sut, addSurveySpy } = makeSut()
+    jest.spyOn(addSurveySpy, 'add').mockImplementationOnce(throwError)
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
