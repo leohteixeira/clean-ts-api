@@ -1,6 +1,6 @@
 import { AddSurvey } from '@/domain/usecases'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
-import { badRequest, serverError } from '@/presentation/helpers'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
 
 export class AddSurveyController implements Controller {
   constructor (
@@ -17,13 +17,12 @@ export class AddSurveyController implements Controller {
       }
 
       const { question, answers } = httpRequest.body
-
       await this.addSurvey.add({
         question,
         answers
       })
 
-      return null
+      return noContent()
     } catch (error) {
       return serverError(error)
     }
