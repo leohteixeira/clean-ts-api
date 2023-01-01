@@ -1,6 +1,6 @@
 import { HttpRequest } from '@/presentation/protocols'
 import { AddSurveyController } from '@/presentation/controllers'
-import { badRequest, serverError } from '@/presentation/helpers'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
 import { AddSurveySpy, ValidationSpy } from '@/tests/presentation/mocks'
 import { throwError } from '@/tests/utils'
 
@@ -59,5 +59,12 @@ describe('AddSurvey Controller', () => {
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(noContent())
   })
 })
